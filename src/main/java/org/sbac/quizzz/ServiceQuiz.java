@@ -30,6 +30,7 @@ public class ServiceQuiz {
         response.nom = q.nom;
         response.id = q.id;
         response.nombreQuestions = q.questions.size();
+        response.questions = new ArrayList<>();
         for (MQuestion question : q.questions) {
             response.questions.add(question.contenu);
         }
