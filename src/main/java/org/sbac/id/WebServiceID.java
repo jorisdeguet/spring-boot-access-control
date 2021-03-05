@@ -36,10 +36,4 @@ public class WebServiceID {
         return signin(s);
     }
 
-    @PostMapping("/api/id/signout")
-    public String signout()  {
-        System.out.println("ID : demande de déconnexion " );
-        SecurityContextHolder.getContext().setAuthentication(null);
-        return "";
-    }
 }

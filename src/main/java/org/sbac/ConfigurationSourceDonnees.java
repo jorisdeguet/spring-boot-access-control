@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
 
-/**
- * Allows the configuration of the datasource that will be used by Spring data
- */
 @Configuration
 public class ConfigurationSourceDonnees {
     

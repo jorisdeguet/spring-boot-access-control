@@ -9,8 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ConfigurationErreurs extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = { Exception.class })
-    protected ResponseEntity<Object> handleConflict(Exception ex, WebRequest request) {
-        ex.printStackTrace();
+    protected ResponseEntity<Object> traduitException(Exception ex, WebRequest request) {
         String bodyOfResponse = ex.getClass().getSimpleName();
         return handleExceptionInternal(ex, bodyOfResponse, 
           new HttpHeaders(), HttpStatus.BAD_REQUEST, request);

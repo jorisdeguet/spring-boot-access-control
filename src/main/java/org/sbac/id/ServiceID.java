@@ -22,11 +22,9 @@ public class ServiceID implements UserDetailsService {
 
     public static class BadCredentials extends Exception { }
 
-
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private DepotUtilisateur userRepository;
 
-    // This one has to be there by convention to fit with Spring Security
     @Override
     public UserDetails loadUserByUsername(String nom) throws UsernameNotFoundException {
         MUtilisateur utilisateur = userRepository.findByNomUtilisateur(nom.trim().toLowerCase()).get();
@@ -42,8 +40,8 @@ public class ServiceID implements UserDetailsService {
             throw new BadCredentials();
         } catch (NoSuchElementException e) {
             MUtilisateur p = new MUtilisateur();
-            p.nomUtilisateur = 			nom;
-            p.motDePasse = 		    passwordEncoder.encode(req.motDePasse);
+            p.nomUtilisateur = nom;
+            p.motDePasse = passwordEncoder.encode(req.motDePasse);
             userRepository.save(p);
         }
     }
