@@ -13,7 +13,7 @@ public class MUtilisateur {
     @Basic  public String motDePasse;
 
     // ORM style storage.
-    @OneToMany(fetch=FetchType.EAGER)
+    @OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     public List<MQuiz> quizs = new ArrayList<>();
 
 }

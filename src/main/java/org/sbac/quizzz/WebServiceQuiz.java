@@ -25,14 +25,14 @@ public class WebServiceQuiz {
 	}
 
 	@PostMapping("/api/ajouter")
-	public @ResponseBody String ajouterQuestion(@RequestBody AjouterQuestionReq req) throws ServiceQuiz.Existing {
+	public @ResponseBody String ajouterQuestion(@RequestBody AjouterQuestionReq req) throws IllegalAccessException {
 		System.out.println("Quiz : ajouter question dans Quiz");
 		service.ajouterQuestion(req, utilisateurActuel());
 		return "";
 	}
 
 	@PostMapping("/api/modifier")
-	public @ResponseBody String modifierQuestion(@RequestBody ModifierQuestionReq req) throws ServiceQuiz.Existing {
+	public @ResponseBody String modifierQuestion(@RequestBody ModifierQuestionReq req) throws IllegalAccessException {
 		System.out.println("Quiz : modifier question dans Quiz");
 		service.modifierQuestion(req, utilisateurActuel());
 		return "";

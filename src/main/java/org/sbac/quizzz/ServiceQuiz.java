@@ -16,7 +16,6 @@ public class ServiceQuiz {
 
     public static class Existing extends Exception { }
 
-
     @Autowired          DepotUtilisateur depotUtilisateur;
     @Autowired          DepotQuiz depotQuiz;
     @Autowired          DepotQuestion depotQuestion;
@@ -43,24 +42,27 @@ public class ServiceQuiz {
         // Tout est bon, on crée le quiz
         MQuiz q = new MQuiz();
         q.nom = req.nom;
-        depotQuiz.save(q);
         user.quizs.add(q);
         depotUtilisateur.save(user);
     }
 
-    public void modifierQuestion(ModifierQuestionReq request, MUtilisateur utilisateurActuel) {
+    public void modifierQuestion(ModifierQuestionReq request, MUtilisateur utilisateurActuel) throws IllegalAccessException {
         MQuestion question = depotQuestion.findById(request.questionID).get();
+        if (!estAuteur(question, utilisateurActuel)) {
+            throw new IllegalAccessException();
+        }
         question.contenu = request.nouvelleQuestion;
         depotQuestion.save(question);
     }
 
-    public void ajouterQuestion(AjouterQuestionReq request, MUtilisateur utilisateurActuel) {
+    public void ajouterQuestion(AjouterQuestionReq request, MUtilisateur utilisateurActuel) throws IllegalAccessException {
         MQuiz q = depotQuiz.findById(request.quizID).get();
+        if (!estAuteur(q, utilisateurActuel)) {
+            throw new IllegalAccessException();
+        }
         MQuestion question = new MQuestion();
         question.contenu = request.question;
         question.date = new Date();
-        depotQuestion.save(question);
-
         q.questions.add(question);
         depotQuiz.save(q);
     }
@@ -78,6 +80,17 @@ public class ServiceQuiz {
         return res;
     }
 
+    private boolean estAuteur(MQuiz quiz, MUtilisateur utilisateur){
+        for (MQuiz q : utilisateur.quizs) {
+            if (q.id == quiz.id) return true;
+        }
+        return false;
+    }
+
+    private boolean estAuteur(MQuestion question, MUtilisateur utilisateur){
+        MQuiz quiz = depotQuiz.findByQuestionsId(question.id).get();
+        return estAuteur(quiz, utilisateur);
+    }
 
     public MUtilisateur utilisateurParSonNom(String nom) {
         return depotUtilisateur.findByNomUtilisateur(nom).get();

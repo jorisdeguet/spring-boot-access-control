@@ -13,7 +13,7 @@ public class MQuiz {
     @Basic
     public String nom;
 
-    @OneToMany(fetch=FetchType.EAGER)
+    @OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     public List<MQuestion> questions = new ArrayList<>();
 
 }
