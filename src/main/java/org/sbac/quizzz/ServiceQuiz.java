@@ -33,10 +33,9 @@ public class ServiceQuiz {
         return response;
     }
 
-    public void creerQuiz(CreerQuizReq req) throws Existing {
+    public void creerQuiz(CreerQuizReq req, MUtilisateur user) throws Existing {
         req.nom = req.nom.trim();
         if (req.nom.trim().length() == 0) throw new IllegalArgumentException();
-        MUtilisateur user = depotUtilisateur.findByNomUtilisateur(req.nomUtilisateur).get();
         for (MQuiz b : user.quizs) {
             if (b.nom.equalsIgnoreCase(req.nom)) throw new Existing();
         }
@@ -47,13 +46,13 @@ public class ServiceQuiz {
         depotUtilisateur.save(user);
     }
 
-    public void modifierQuestion(ModifierQuestionReq request) throws IllegalAccessException {
+    public void modifierQuestion(ModifierQuestionReq request) {
         MQuestion question = depotQuestion.findById(request.questionID).get();
         question.contenu = request.nouvelleQuestion;
         depotQuestion.save(question);
     }
 
-    public void ajouterQuestion(AjouterQuestionReq request) throws IllegalAccessException {
+    public void ajouterQuestion(AjouterQuestionReq request) {
         MQuiz q = depotQuiz.findById(request.quizID).get();
         MQuestion question = new MQuestion();
         question.contenu = request.question;

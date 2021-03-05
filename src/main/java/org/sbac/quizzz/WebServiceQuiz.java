@@ -20,7 +20,7 @@ public class WebServiceQuiz {
 	@PostMapping("/api/creer")
 	public @ResponseBody String creerQuiz(@RequestBody CreerQuizReq request) throws ServiceQuiz.Existing {
 		System.out.println("Quiz : ajouter Quiz");
-		service.creerQuiz(request);
+		service.creerQuiz(request, utilisateurActuel());
 		return "";
 	}
 
