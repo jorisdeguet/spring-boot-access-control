@@ -1,10 +1,7 @@
 package org.sbac.quizzz;
 
 import org.sbac.model.*;
-import org.sbac.transfert.AjouterQuestionReq;
-import org.sbac.transfert.CreerQuizReq;
-import org.sbac.transfert.QuizDetail;
-import org.sbac.transfert.QuizResume;
+import org.sbac.transfert.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +46,12 @@ public class ServiceQuiz {
         depotQuiz.save(q);
         user.quizs.add(q);
         depotUtilisateur.save(user);
+    }
+
+    public void modifierQuestion(ModifierQuestionReq request, MUtilisateur utilisateurActuel) {
+        MQuestion question = depotQuestion.findById(request.questionID).get();
+        question.contenu = request.nouvelleQuestion;
+        depotQuestion.save(question);
     }
 
     public void ajouterQuestion(AjouterQuestionReq request, MUtilisateur utilisateurActuel) {

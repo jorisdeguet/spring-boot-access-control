@@ -2,10 +2,7 @@ package org.sbac.quizzz;
 
 import org.sbac.model.MUtilisateur;
 
-import org.sbac.transfert.AjouterQuestionReq;
-import org.sbac.transfert.CreerQuizReq;
-import org.sbac.transfert.QuizDetail;
-import org.sbac.transfert.QuizResume;
+import org.sbac.transfert.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,9 +25,16 @@ public class WebServiceQuiz {
 	}
 
 	@PostMapping("/api/ajouter")
-	public @ResponseBody String ajouterQuestion(@RequestBody AjouterQuestionReq request) throws ServiceQuiz.Existing {
+	public @ResponseBody String ajouterQuestion(@RequestBody AjouterQuestionReq req) throws ServiceQuiz.Existing {
 		System.out.println("Quiz : ajouter question dans Quiz");
-		service.ajouterQuestion(request, utilisateurActuel());
+		service.ajouterQuestion(req, utilisateurActuel());
+		return "";
+	}
+
+	@PostMapping("/api/modifier")
+	public @ResponseBody String modifierQuestion(@RequestBody ModifierQuestionReq req) throws ServiceQuiz.Existing {
+		System.out.println("Quiz : modifier question dans Quiz");
+		service.modifierQuestion(req, utilisateurActuel());
 		return "";
 	}
 
