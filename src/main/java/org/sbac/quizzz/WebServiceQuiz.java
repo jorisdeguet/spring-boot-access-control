@@ -27,14 +27,14 @@ public class WebServiceQuiz {
 	@PostMapping("/api/ajouter")
 	public @ResponseBody String ajouterQuestion(@RequestBody AjouterQuestionReq req) throws IllegalAccessException {
 		System.out.println("Quiz : ajouter question dans Quiz");
-		service.ajouterQuestion(req);
+		service.ajouterQuestion(req, utilisateurActuel());
 		return "";
 	}
 
 	@PostMapping("/api/modifier")
 	public @ResponseBody String modifierQuestion(@RequestBody ModifierQuestionReq req) throws IllegalAccessException {
 		System.out.println("Quiz : modifier question dans Quiz");
-		service.modifierQuestion(req);
+		service.modifierQuestion(req, utilisateurActuel());
 		return "";
 	}
 
@@ -48,7 +48,7 @@ public class WebServiceQuiz {
     @GetMapping("/api/detail/{id}")
     public @ResponseBody QuizDetail detail(@PathVariable long id) {
 		System.out.println("Detail pour " + id);
-		return service.detail(id);
+		return service.detail(id, utilisateurActuel());
     }
 
 	private MUtilisateur utilisateurActuel() {

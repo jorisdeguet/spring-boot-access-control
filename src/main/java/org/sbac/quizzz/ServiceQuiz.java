@@ -20,8 +20,8 @@ public class ServiceQuiz {
     @Autowired          DepotQuiz depotQuiz;
     @Autowired          DepotQuestion depotQuestion;
 
-    public QuizDetail detail(Long id) {
-        MQuiz q = depotQuiz.findById(id).get();
+    public QuizDetail detail(Long id, MUtilisateur user) {
+        MQuiz q = user.quizs.stream().filter(elt -> elt.id == id).findFirst().get();
         QuizDetail response = new QuizDetail();
         response.nom = q.nom;
         response.id = q.id;
@@ -46,14 +46,20 @@ public class ServiceQuiz {
         depotUtilisateur.save(user);
     }
 
-    public void modifierQuestion(ModifierQuestionReq request) {
+    public void modifierQuestion(ModifierQuestionReq request, MUtilisateur utilisateurActuel) throws IllegalAccessException {
         MQuestion question = depotQuestion.findById(request.questionID).get();
+        if (!estAuteur(question, utilisateurActuel)) {
+            throw new IllegalAccessException();
+        }
         question.contenu = request.nouvelleQuestion;
         depotQuestion.save(question);
     }
 
-    public void ajouterQuestion(AjouterQuestionReq request) {
+    public void ajouterQuestion(AjouterQuestionReq request, MUtilisateur utilisateurActuel) throws IllegalAccessException {
         MQuiz q = depotQuiz.findById(request.quizID).get();
+        if (!estAuteur(q, utilisateurActuel)) {
+            throw new IllegalAccessException();
+        }
         MQuestion question = new MQuestion();
         question.contenu = request.question;
         question.date = new Date();
@@ -72,6 +78,18 @@ public class ServiceQuiz {
             res.add(r);
         }
         return res;
+    }
+
+    private boolean estAuteur(MQuiz quiz, MUtilisateur utilisateur){
+        for (MQuiz q : utilisateur.quizs) {
+            if (q.id == quiz.id) return true;
+        }
+        return false;
+    }
+
+    private boolean estAuteur(MQuestion question, MUtilisateur utilisateur){
+        MQuiz quiz = depotQuiz.findByQuestionsId(question.id).get();
+        return estAuteur(quiz, utilisateur);
     }
 
     public MUtilisateur utilisateurParSonNom(String nom) {
