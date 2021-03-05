@@ -4,6 +4,8 @@ import org.sbac.model.MUtilisateur;
 
 import org.sbac.transfert.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +20,7 @@ public class WebServiceQuiz {
 	@PostMapping("/api/creer")
 	public @ResponseBody String creerQuiz(@RequestBody CreerQuizReq request) throws ServiceQuiz.Existing {
 		System.out.println("Quiz : ajouter Quiz");
-		service.creerQuiz(request, utilisateurActuel(request.nomUtilisateur));
+		service.creerQuiz(request);
 		return "";
 	}
 
@@ -36,10 +38,10 @@ public class WebServiceQuiz {
 		return "";
 	}
 
-	@GetMapping("/api/home/{nomUtilisateur}")
-	public @ResponseBody List<QuizResume> home(@PathVariable String nomUtilisateur) {
+	@GetMapping("/api/home")
+	public @ResponseBody List<QuizResume> home() {
 		System.out.println("Accueil" );
-		MUtilisateur user = utilisateurActuel(nomUtilisateur);
+		MUtilisateur user = utilisateurActuel();
 		return service.accueil(user.id);
 	}
 
@@ -49,8 +51,9 @@ public class WebServiceQuiz {
 		return service.detail(id);
     }
 
-	private MUtilisateur utilisateurActuel(String nomUtilisateur) {
-		MUtilisateur utilisateur = service.utilisateurParSonNom( nomUtilisateur );
+	private MUtilisateur utilisateurActuel() {
+		UserDetails ud = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		MUtilisateur utilisateur = service.utilisateurParSonNom(ud.getUsername());
 		return utilisateur;
 	}
 
